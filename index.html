@@ -3,69 +3,1280 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AI Creative Agent</title>
+  <title>AI Creative Agent Team — One idea, five deliverables.</title>
+  
+  <!-- Fonts -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap">
+  
+  <style>
+    /* Design System & Variables */
+    :root {
+      --bg: #F7F7FB;
+      --text: #14142B;
+      --muted: #6B6B80;
+      --line: rgba(20,20,43,.08);
+      --gradient-brand: linear-gradient(120deg, #6E8BFF, #A77BFF 40%, #FF8AC8 70%, #FFB37A);
+      --gradient-text: linear-gradient(120deg, #4F6BFF, #8B5CF6 40%, #EC4899 70%, #FF7A45);
+      --font-sans: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      --font-serif: 'Instrument Serif', serif;
+      --ease-spring: cubic-bezier(.2,1.3,.3,1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      overflow-x: hidden;
+      position: relative;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Noise Grain Texture */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      pointer-events: none;
+      opacity: .04;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    }
+
+    /* Scroll Margin for Fixed Nav */
+    section[id] { scroll-margin-top: 96px; }
+
+    /* Utility typography */
+    .serif-italic { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
+    .gradient-text { background: var(--gradient-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+    /* Glass & Mesh Backgrounds */
+    .mesh {
+      background: radial-gradient(circle at 16% 18%, #8EA2FF 0 14%, transparent 32%),
+                  radial-gradient(circle at 78% 9%, #FFB3D9 0 13%, transparent 30%),
+                  radial-gradient(circle at 66% 62%, #FFD3A8 0 16%, transparent 34%),
+                  radial-gradient(circle at 25% 74%, #9BE3FF 0 15%, transparent 32%),
+                  radial-gradient(circle at 50% 32%, #C4A5FF 0 16%, transparent 36%),
+                  linear-gradient(135deg, #fff, #F5F0FF 40%, #FFF7F0);
+    }
+    .glass {
+      background: rgba(255,255,255,.55);
+      -webkit-backdrop-filter: blur(24px) saturate(160%);
+      backdrop-filter: blur(24px) saturate(160%);
+      border: 1px solid rgba(255,255,255,.7);
+      box-shadow: 0 30px 80px -30px rgba(76,70,160,.25), inset 0 1px 1px #fff;
+    }
+
+    /* 1. Navigation */
+    .nav-wrap {
+      position: fixed;
+      top: 16px;
+      left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+      padding: 0 12px;
+    }
+    .nav-bar {
+      width: min(1080px, 100% - 24px);
+      height: 56px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px 0 20px;
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 15px;
+      letter-spacing: -.03em;
+      text-decoration: none;
+      color: var(--text);
+    }
+    .nav-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--gradient-brand);
+    }
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+    .nav-links a { text-decoration: none; color: inherit; transition: color .2s; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      background: #14142B;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: transform .2s var(--ease-spring), opacity .2s;
+    }
+    .nav-cta:hover { transform: scale(1.02); opacity: .9; }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-bar { padding: 0 12px 0 16px; }
+    }
+
+    /* 2. Hero Section */
+    .hero-section {
+      padding: 96px 12px 32px 12px;
+      max-width: 1440px;
+      margin: 0 auto;
+    }
+    .hero-panel {
+      border-radius: 36px;
+      padding: 48px 32px 40px 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.7);
+      border: 1px solid rgba(255,255,255,.9);
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      white-space: nowrap;
+    }
+    .hero-title {
+      font-size: clamp(40px, 6vw, 88px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -.04em;
+      word-break: keep-all;
+      text-wrap: balance;
+      max-width: 960px;
+      margin-bottom: 16px;
+    }
+    .hero-sub {
+      font-size: clamp(16px, 1.8vw, 20px);
+      color: var(--muted);
+      max-width: 640px;
+      line-height: 1.5;
+      word-break: keep-all;
+      margin-bottom: 36px;
+    }
+    .logo-strip {
+      margin-top: 36px;
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--muted);
+      letter-spacing: -.01em;
+      opacity: .8;
+      white-space: nowrap;
+      overflow: hidden;
+      width: 100%;
+      text-align: center;
+    }
+
+    /* Chat Card & Web Chat Integration */
+    .chat-card {
+      width: min(860px, 100%);
+      border-radius: 28px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      text-align: left;
+      transition: height .6s var(--ease-spring);
+    }
+    .chat-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 8px;
+    }
+    .chat-dots { display: flex; gap: 6px; }
+    .chat-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(20,20,43,.12); }
+    .chat-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+    .connection-status-dot {
+      width: 7px; height: 7px; border-radius: 50%; background: #ccc;
+      transition: background .3s;
+    }
+    body.is-connected .connection-status-dot { background: #10B981; }
+    .chat-reset-btn {
+      background: rgba(255,255,255,.8);
+      border: 1px solid rgba(20,20,43,.08);
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--text);
+      white-space: nowrap;
+    }
+
+    .chat-card > * { flex: none; }
+    .chat-card > #webchat { height: 200px; min-height: 0; }
+    body.is-started .chat-card { height: calc(100svh - 112px); }
+    body.is-started .chat-card > #webchat { flex: 1 1 0; height: auto; min-height: 0; }
+
+    .chat-foot {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .example-chips {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding-bottom: 2px;
+    }
+    .example-chips::-webkit-scrollbar { display: none; }
+    .chip {
+      background: rgba(255,255,255,.7);
+      border: 1px solid rgba(20,20,43,.08);
+      padding: 7px 14px;
+      border-radius: 999px;
+      font-size: 12.5px;
+      font-weight: 500;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: background .2s, transform .2s;
+      color: var(--text);
+    }
+    .chip:hover { background: #fff; transform: translateY(-1px); }
+
+    .working-indicator {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--muted);
+      padding: 0 4px;
+    }
+    body.is-working .working-indicator { display: flex; }
+    .working-dots span {
+      display: inline-block;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #8B5CF6;
+      animation: bounce 1.4s infinite ease-in-out both;
+    }
+    .working-dots span:nth-child(1) { animation-delay: -0.32s; }
+    .working-dots span:nth-child(2) { animation-delay: -0.16s; }
+    @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1.0); } }
+
+    .composer {
+      position: relative;
+      background: rgba(255,255,255,.85);
+      border: 1px solid rgba(20,20,43,.1);
+      border-radius: 28px;
+      padding: 8px 12px 8px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: box-shadow .3s, transform .3s;
+    }
+    .composer:focus-within {
+      box-shadow: 0 12px 32px -8px rgba(76,70,160,.2);
+      transform: translateY(-1px);
+      border-color: rgba(139,92,246,.4);
+    }
+    .composer textarea {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-family: var(--font-sans);
+      font-size: 14.5px;
+      color: var(--text);
+      resize: none;
+      max-height: 120px;
+      line-height: 1.5;
+    }
+    .composer textarea::placeholder { color: #9CA3AF; }
+    .send-btn {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: #14142B;
+      color: #fff;
+      border: none;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      flex: none;
+      transition: opacity .2s, transform .2s;
+    }
+    .send-btn:disabled { opacity: .3; cursor: not-allowed; }
+    .send-btn:not(:disabled):hover { transform: scale(1.05); }
+
+    .chat-footer-note {
+      font-size: 11px;
+      color: #9CA3AF;
+      text-align: center;
+      letter-spacing: -.01em;
+    }
+
+    /* 3. Stats Strip */
+    .stats-section {
+      max-width: 1200px;
+      margin: 32px auto;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+    .stat-card {
+      border-radius: 20px;
+      padding: 24px;
+      text-align: center;
+      border: 1px solid var(--line);
+    }
+    .stat-num {
+      font-size: clamp(28px, 3.5vw, 42px);
+      font-weight: 800;
+      letter-spacing: -.03em;
+      margin-bottom: 4px;
+    }
+    .stat-label {
+      font-size: 13.5px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+    @media (max-width: 768px) { .stats-section { grid-template-columns: repeat(2, 1fr); } }
+
+    /* 4. Features Section */
+    .section-container {
+      max-width: 1200px;
+      margin: 96px auto;
+      padding: 0 24px;
+    }
+    .section-header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+    .section-eyebrow {
+      font-size: clamp(20px, 2.5vw, 28px);
+      color: #8B5CF6;
+      margin-bottom: 8px;
+    }
+    .section-title {
+      font-size: clamp(32px, 4.2vw, 56px);
+      font-weight: 800;
+      letter-spacing: -.04em;
+      line-height: 1.1;
+      word-break: keep-all;
+      text-wrap: balance;
+    }
+
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 20px;
+    }
+    .bento-card {
+      border-radius: 28px;
+      padding: 32px;
+      border: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      transition: transform .3s var(--ease-spring), box-shadow .3s;
+    }
+    .bento-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px -15px rgba(20,20,43,.08);
+    }
+    .bento-card.col-3 { grid-column: span 3; }
+    .bento-card.col-2 { grid-column: span 2; }
+    @media (max-width: 900px) { .bento-card.col-3, .bento-card.col-2 { grid-column: span 6; } }
+
+    .bento-mockup {
+      width: 100%;
+      height: 180px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.5);
+      margin-top: 24px;
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255,255,255,.8);
+    }
+    .bento-content h3 { font-size: 20px; font-weight: 700; margin-bottom: 8px; letter-spacing: -.02em; }
+    .bento-content p { font-size: 14px; color: var(--muted); line-height: 1.5; margin-bottom: 16px; }
+    .file-tag {
+      display: inline-block;
+      font: 600 11.5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      padding: 5px 10px;
+      border-radius: 6px;
+      background: rgba(20,20,43,.04);
+      color: #5B4BC4;
+    }
+
+    /* Mockup custom drawings */
+    .mockup-slides {
+      display: flex;
+      position: relative;
+      width: 120px; height: 80px;
+      transition: transform .3s;
+    }
+    .bento-card:hover .mockup-slides { transform: scale(1.05); }
+    .mock-slide-card {
+      position: absolute;
+      inset: 0;
+      border-radius: 8px;
+      background: #fff;
+      border: 1px solid rgba(20,20,43,.1);
+      box-shadow: 0 4px 12px rgba(0,0,0,.05);
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .mock-slide-card:nth-child(1) { transform: translate(-16px, 8px) rotate(-6deg); z-index: 1; }
+    .mock-slide-card:nth-child(2) { transform: translate(0, 0) rotate(0deg); z-index: 2; background: linear-gradient(135deg, #EEF0FF, #fff); }
+    .mock-slide-card:nth-child(3) { transform: translate(16px, 8px) rotate(6deg); z-index: 1; }
+
+    .mockup-poster {
+      width: 90px; height: 130px;
+      background: var(--gradient-brand);
+      border-radius: 10px;
+      padding: 12px;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      box-shadow: 0 10px 20px rgba(110,139,255,.3);
+    }
+    .mockup-doc {
+      width: 110px; height: 140px;
+      background: #fff;
+      border-radius: 8px;
+      border: 1px solid rgba(20,20,43,.1);
+      padding: 12px;
+      box-shadow: 0 8px 16px rgba(0,0,0,.04);
+    }
+    .mockup-browser {
+      width: 180px; height: 110px;
+      background: #fff;
+      border-radius: 10px;
+      border: 1px solid rgba(20,20,43,.1);
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0,0,0,.05);
+    }
+    .mockup-browser-bar {
+      height: 20px; background: #F3F4F6; display: flex; align-items: center; gap: 4px; padding: 0 8px;
+    }
+    .mockup-browser-dot { width: 6px; height: 6px; border-radius: 50%; background: #D1D5DB; }
+    .mockup-excel {
+      width: 180px; height: 110px;
+      background: #fff;
+      border-radius: 10px;
+      border: 1px solid rgba(20,20,43,.1);
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 8px 20px rgba(0,0,0,.05);
+    }
+    .excel-bar-chart {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      height: 50px;
+      padding-top: 10px;
+    }
+    .excel-bar {
+      flex: 1;
+      background: #8B5CF6;
+      border-radius: 4px 4px 0 0;
+      transition: height 1s var(--ease-spring);
+      height: var(--h);
+    }
+
+    /* 5. How Section */
+    .how-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+    @media (max-width: 900px) { .how-grid { grid-template-columns: 1fr; } }
+    .orbit-card {
+      border-radius: 32px;
+      border: 1px solid var(--line);
+      padding: 40px;
+      overflow: hidden;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,.4);
+    }
+    .orbit { --r: 150px; position: relative; width: calc(var(--r) * 2); aspect-ratio: 1; margin: 48px auto; }
+    .orbit-ring { position: absolute; inset: 0; border-radius: 50%; border: 1px dashed rgba(20,20,43,.16); animation: orbit-spin 40s linear infinite; }
+    .orbit .agent { position: absolute; left: 50%; top: 50%; transform: rotate(var(--a)) translateX(var(--r)) rotate(calc(-1 * var(--a))); }
+    .orbit .agent b { position: absolute; translate: -50% -50%; white-space: nowrap; padding: 8px 12px; border-radius: 999px; font: 600 12px ui-monospace, SFMono-Regular, Menlo, monospace; color: #5B4BC4; background: rgba(255,255,255,.8); border: 1px solid #fff; animation: orbit-spin 40s linear infinite reverse; }
+    .orbit .leader { position: absolute; left: 50%; top: 50%; translate: -50% -50%; width: 112px; aspect-ratio: 1; border-radius: 50%; display: grid; place-items: center; font-weight: 800; background: #14142B; color: #fff; box-shadow: 0 10px 30px rgba(20,20,43,.3); }
+    @keyframes orbit-spin { to { rotate: 360deg; } }
+    @media (max-width: 600px) { .orbit { --r: 100px; } .orbit .agent b { font-size: 10px; padding: 6px 9px; } .orbit .leader { width: 84px; } }
+
+    .steps-list {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .step-item {
+      display: flex;
+      gap: 20px;
+    }
+    .step-num {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: rgba(139,92,246,.1);
+      color: #8B5CF6;
+      font-weight: 700;
+      display: grid;
+      place-items: center;
+      flex: none;
+    }
+    .step-content h4 { font-size: 17px; font-weight: 700; margin-bottom: 4px; }
+    .step-content p { font-size: 14.5px; color: var(--muted); line-height: 1.5; }
+
+    /* 6. Design Theme Section */
+    .design-banner {
+      width: 100vw;
+      margin-left: calc(50% - 50vw);
+      background: linear-gradient(120deg, #5B3DF5, #FF4FA3 50%, #FF9F45);
+      color: #fff;
+      padding: 96px 24px;
+      text-align: center;
+    }
+    .design-banner .section-eyebrow { color: rgba(255,255,255,.8); }
+    .themes-grid {
+      max-width: 1200px;
+      margin: 48px auto 0 auto;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+    }
+    @media (max-width: 1024px) { .themes-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px) { .themes-grid { grid-template-columns: 1fr; } }
+    .theme-card {
+      background: rgba(255,255,255,.15);
+      -webkit-backdrop-filter: blur(16px);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 20px;
+      padding: 24px;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .theme-dots { display: flex; gap: 6px; }
+    .theme-dot { width: 14px; height: 14px; border-radius: 50%; border: 1px solid rgba(255,255,255,.4); }
+    .theme-card h4 { font-size: 16px; font-weight: 700; }
+    .theme-card p { font-size: 13px; opacity: .85; line-height: 1.4; }
+
+    /* 7. Ready Prompts Marquee */
+    .marquee-section {
+      max-width: 100%;
+      overflow: hidden;
+      margin: 96px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .marquee-track {
+      display: flex;
+      gap: 16px;
+      width: max-content;
+      animation: marquee 35s linear infinite;
+    }
+    .marquee-track.reverse { animation-direction: reverse; }
+    @keyframes marquee { to { transform: translateX(-50%); } }
+    .marquee-chip {
+      background: #fff;
+      border: 1px solid var(--line);
+      padding: 12px 24px;
+      border-radius: 999px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      box-shadow: 0 4px 12px rgba(20,20,43,.03);
+      transition: border-color .2s, transform .2s;
+    }
+    .marquee-chip:hover { border-color: #8B5CF6; transform: translateY(-2px); }
+
+    /* 8. Final CTA Section */
+    .cta-section {
+      max-width: 1440px;
+      margin: 0 auto 96px auto;
+      padding: 0 12px;
+    }
+    .cta-panel {
+      border-radius: 36px;
+      padding: 96px 24px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+    .cta-button {
+      background: #14142B;
+      color: #fff;
+      padding: 16px 36px;
+      border-radius: 999px;
+      font-size: 16px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: transform .2s var(--ease-spring), opacity .2s;
+    }
+    .cta-button:hover { transform: scale(1.03); opacity: .9; }
+
+    /* 9. Footer */
+    footer {
+      text-align: center;
+      padding: 32px 24px 64px 24px;
+      font-size: 13.5px;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    /* 10. Floating Notification */
+    .floating-notif {
+      position: fixed;
+      bottom: 24px; right: 24px;
+      z-index: 1000;
+      padding: 12px 20px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.9);
+      -webkit-backdrop-filter: blur(16px);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,.9);
+      box-shadow: 0 15px 35px rgba(20,20,43,.15);
+      font-size: 13.5px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity .3s, transform .3s;
+      pointer-events: none;
+      text-decoration: none;
+      color: var(--text);
+    }
+    .floating-notif.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+
+    /* Scroll Reveal Animation Styles */
+    [data-reveal] {
+      opacity: 0;
+      transform: translateY(24px);
+      filter: blur(4px);
+      transition: opacity .8s var(--ease-spring), transform .8s var(--ease-spring), filter .8s;
+    }
+    [data-reveal].revealed {
+      opacity: 1;
+      transform: translateY(0);
+      filter: blur(0);
+    }
+
+    /* Aurora working animation for composer */
+    @property --aurora { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+    .composer::before { content: ""; position: absolute; inset: -1px; padding: 1.5px; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity .6s; background: conic-gradient(from var(--aurora), #a5b4fc, #f0abfc, #fda4af, #fcd34d, #86efac, #67e8f9, #a5b4fc); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; animation: aurora 6s linear infinite; }
+    body.is-working .composer::before { opacity: .8; }
+    @keyframes aurora { to { --aurora: 360deg; } }
+
+    /* Web Chat custom adjustments & Attachments */
+    #webchat .webchat__typing-indicator { display: none !important; }
+    #webchat .webchat__stacked-layout:not(.webchat__stacked-layout--from-user) .webchat__stacked-layout__status { display: none; }
+    #webchat .webchat__stacked-layout__attachment-row { margin-top: 8px !important; }
+    #webchat .webchat__stacked-layout__attachment, #webchat .webchat__stacked-layout__attachment .webchat__bubble__content { background: none !important; border: 0 !important; overflow: visible !important; }
+    #webchat .webchat__stacked-layout__content:has(.webchat__fileContent) { overflow: visible !important; }
+    #webchat .webchat__fileContent { padding: 0 !important; }
+    #webchat .webchat__fileContent__buttonLink { display: flex !important; align-items: center; gap: 12px; height: 56px; padding: 0 18px 0 12px; border-radius: 18px; text-decoration: none; color: #14142B; background: rgba(255,255,255,.72); -webkit-backdrop-filter: blur(24px) saturate(160%); backdrop-filter: blur(24px) saturate(160%); border: 1px solid rgba(255,255,255,.8); box-shadow: 0 10px 24px -16px rgba(76,70,160,.3), inset 0 1px 1px #fff; }
+    #webchat .webchat__fileContent__buttonLink::before { content: "FILE"; flex: none; padding: 5px 8px; border-radius: 999px; background: linear-gradient(120deg, #EEF0FF, #FBEFFF); color: #5B4BC4; font: 600 10.5px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .04em; }
+    #webchat a[download$=".pptx" i]::before { content: "PPTX"; } #webchat a[download$=".docx" i]::before { content: "DOCX"; } #webchat a[download$=".xlsx" i]::before { content: "XLSX"; } #webchat a[download$=".html" i]::before { content: "HTML"; }
+    #webchat .webchat__fileContent__badge { flex: 1; min-width: 0; background: none !important; padding: 0 !important; }
+    #webchat .webchat__fileContent__fileName { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace !important; color: #14142B !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #webchat .webchat__fileContent__downloadIcon { flex: none; box-sizing: content-box; width: 16px; height: 16px; padding: 0; fill: #6B6B80; color: #6B6B80; }
+    
+    #webchat .webchat__render-markdown { word-break: keep-all; overflow-wrap: anywhere; }
+    #webchat .webchat__render-markdown table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; border-spacing: 0; margin: 12px 0; font-variant-numeric: tabular-nums; }
+    #webchat .webchat__render-markdown th, #webchat .webchat__render-markdown td { padding: 9px 18px 9px 0; border-bottom: 1px solid rgba(20,20,43,.08); white-space: nowrap; }
+    #webchat .webchat__render-markdown th { font-size: 12px; font-weight: 600; color: #6B6B80; }
+  </style>
 </head>
 <body>
-  <p id="status" role="status" aria-live="polite">채팅에 연결하는 중입니다...</p>
-  <div id="webchat" style="height: 600px"></div>
+
+  <!-- 1. Navigation -->
+  <div class="nav-wrap">
+    <nav class="nav-bar glass">
+      <a href="#" class="nav-brand">
+        <div class="nav-dot"></div>
+        AI Creative Agent Team
+      </a>
+      <ul class="nav-links">
+        <li><a href="#features">기능</a></li>
+        <li><a href="#how">작동 방식</a></li>
+        <li><a href="#design">디자인</a></li>
+      </ul>
+      <button class="nav-cta" onclick="scrollToChat()">지금 써 보기</button>
+    </nav>
+  </div>
+
+  <!-- 2. Hero Section -->
+  <section class="hero-section">
+    <div class="hero-panel mesh">
+      <div class="badge">
+        <span style="color: #8B5CF6;">●</span> Copilot Studio 멀티 에이전트 &nbsp;·&nbsp; <span class="serif-italic" style="font-size: 15px;">One idea, five deliverables.</span>
+      </div>
+      <h1 class="hero-title">
+        한 줄의 아이디어,<br><span class="gradient-text">다섯 개의 결과물.</span>
+      </h1>
+      <p class="hero-sub">
+        팀장 에이전트가 전문가 다섯에게 일을 나눠, 발표자료부터 예산 분석까지 한 번에 만들어 드려요.
+      </p>
+
+      <!-- Chat Card -->
+      <div class="chat-card glass" id="chatCard">
+        <div class="chat-bar">
+          <div class="chat-dots">
+            <div class="chat-dot"></div>
+            <div class="chat-dot"></div>
+            <div class="chat-dot"></div>
+          </div>
+          <div class="chat-title-wrap">
+            <div class="connection-status-dot" id="connStatusDot"></div>
+            <span>AI Creative Agent Team</span>
+          </div>
+          <button class="chat-reset-btn" onclick="location.reload()">새 대화</button>
+        </div>
+
+        <!-- Web Chat Container -->
+        <div id="webchat"></div>
+
+        <!-- Chat Foot: Example Chips, Working Indicator, Composer -->
+        <div class="chat-foot">
+          <div class="example-chips" id="exampleChips">
+            <button class="chip" onclick="sendPrompt('가을 학교 축제 기획해 줘')">가을 학교 축제 기획해 줘</button>
+            <button class="chip" onclick="sendPrompt('탄소중립 캠페인 홍보물 만들어 줘')">탄소중립 캠페인 홍보물 만들어 줘</button>
+            <button class="chip" onclick="sendPrompt('교사 AI 연수 프로그램 제안해 줘')">교사 AI 연수 프로그램 제안해 줘</button>
+          </div>
+          <div class="working-indicator" id="workingIndicator">
+            <div class="working-dots"><span></span> <span></span> <span></span></div>
+            <span id="workingText">팀이 작업 중 · 0:00</span>
+          </div>
+          <div class="composer" id="composer">
+            <textarea id="userInput" rows="1" placeholder="무엇을 만들어 볼까요?" disabled></textarea>
+            <button class="send-btn" id="sendBtn" onclick="handleSend()" disabled>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+            </button>
+          </div>
+          <div class="chat-footer-note">AI는 실수할 수 있어요. 중요한 내용은 확인하세요.</div>
+        </div>
+      </div>
+
+      <div class="logo-strip">
+        Microsoft Copilot Studio &nbsp;·&nbsp; Claude Opus 5.5 &nbsp;·&nbsp; PowerPoint &nbsp;·&nbsp; Word &nbsp;·&nbsp; Excel &nbsp;·&nbsp; HTML
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Stats Strip -->
+  <div class="stats-section">
+    <div class="stat-card glass" data-reveal>
+      <div class="stat-num" data-target="1">0</div>
+      <div class="stat-label">번의 요청</div>
+    </div>
+    <div class="stat-card glass" data-reveal>
+      <div class="stat-num" data-target="6">0</div>
+      <div class="stat-label">명의 에이전트</div>
+    </div>
+    <div class="stat-card glass" data-reveal>
+      <div class="stat-num" data-target="7">0</div>
+      <div class="stat-label">개의 작업 매뉴얼</div>
+    </div>
+    <div class="stat-card glass" data-reveal>
+      <div class="stat-num" data-target="5">0</div>
+      <div class="stat-label">개의 파일</div>
+    </div>
+  </div>
+
+  <!-- 4. Features Section -->
+  <section class="section-container" id="features">
+    <div class="section-header" data-reveal>
+      <div class="section-eyebrow serif-italic">Five deliverables.</div>
+      <h2 class="section-title">한 번의 요청으로 받는 다섯 가지</h2>
+    </div>
+
+    <div class="bento-grid">
+      <!-- 1. Presentation -->
+      <div class="bento-card col-3 glass" data-reveal>
+        <div class="bento-content">
+          <h3>발표자료</h3>
+          <p>말할 거리가 정리된 10장 내외 슬라이드와 발표자 노트까지 완벽하게 준비됩니다.</p>
+          <span class="file-tag">presentation.pptx</span>
+        </div>
+        <div class="bento-mockup">
+          <div class="mockup-slides">
+            <div class="mock-slide-card"></div>
+            <div class="mock-slide-card"></div>
+            <div class="mock-slide-card"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Poster -->
+      <div class="bento-card col-3 glass" data-reveal>
+        <div class="bento-content">
+          <h3>행사 포스터</h3>
+          <p>걸어 두고 싶은 한 장. 브라우저에서 바로 여는 유리 질감 포스터, 인쇄와 PDF 저장도 지원합니다.</p>
+          <span class="file-tag">poster.html</span>
+        </div>
+        <div class="bento-mockup">
+          <div class="mockup-poster">
+            <div style="font-size: 10px; font-weight: 800;">FESTIVAL</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Proposal -->
+      <div class="bento-card col-2 glass" data-reveal>
+        <div class="bento-content">
+          <h3>기획 제안서</h3>
+          <p>바로 보낼 수 있는 제안서. 테마 색 표지와 읽기 좋은 깔끔한 본문 구성.</p>
+          <span class="file-tag">proposal.docx</span>
+        </div>
+        <div class="bento-mockup">
+          <div class="mockup-doc">
+            <div style="width: 40px; height: 6px; background: #8B5CF6; border-radius: 2px; margin-bottom: 8px;"></div>
+            <div style="width: 100%; height: 4px; background: #E5E7EB; border-radius: 2px; margin-bottom: 4px;"></div>
+            <div style="width: 80%; height: 4px; background: #E5E7EB; border-radius: 2px; margin-bottom: 4px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Webpage -->
+      <div class="bento-card col-2 glass" data-reveal>
+        <div class="bento-content">
+          <h3>웹페이지</h3>
+          <p>신청까지 받는 랜딩. 유리 메뉴 바와 카드로 만든 소개 및 신청 페이지.</p>
+          <span class="file-tag">webpage.html</span>
+        </div>
+        <div class="bento-mockup">
+          <div class="mockup-browser">
+            <div class="mockup-browser-bar">
+              <div class="mockup-browser-dot"></div>
+              <div class="mockup-browser-dot"></div>
+              <div class="mockup-browser-dot"></div>
+            </div>
+            <div style="padding: 10px;">
+              <div style="width: 50px; height: 4px; background: #8B5CF6; border-radius: 2px; margin-bottom: 6px;"></div>
+              <div style="width: 90px; height: 3px; background: #E5E7EB; border-radius: 2px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Budget Analysis -->
+      <div class="bento-card col-2 glass" data-reveal>
+        <div class="bento-content">
+          <h3>예산 분석</h3>
+          <p>숫자가 맞는 예산. 숫자 카드와 차트, 합계는 수식으로 자동 계산됩니다.</p>
+          <span class="file-tag">budget_analysis.xlsx</span>
+        </div>
+        <div class="bento-mockup">
+          <div class="mockup-excel">
+            <div style="font-size: 11px; font-weight: 700;">₩12,400,000</div>
+            <div class="excel-bar-chart">
+              <div class="excel-bar" style="--h: 60%;"></div>
+              <div class="excel-bar" style="--h: 90%;"></div>
+              <div class="excel-bar" style="--h: 40%;"></div>
+              <div class="excel-bar" style="--h: 75%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. How Section -->
+  <section class="section-container" id="how">
+    <div class="section-header" data-reveal>
+      <div class="section-eyebrow serif-italic">How the team works.</div>
+      <h2 class="section-title">팀장 하나, 전문가 다섯, 매뉴얼 일곱.</h2>
+    </div>
+
+    <div class="how-grid">
+      <div class="orbit-card glass" data-reveal>
+        <div class="orbit">
+          <div class="orbit-ring">
+            <span class="agent" style="--a:0deg"><b>ppt-agent</b></span>
+            <span class="agent" style="--a:72deg"><b>poster-agent</b></span>
+            <span class="agent" style="--a:144deg"><b>proposal-agent</b></span>
+            <span class="agent" style="--a:216deg"><b>webpage-agent</b></span>
+            <span class="agent" style="--a:288deg"><b>budget-agent</b></span>
+          </div>
+          <div class="leader">팀장</div>
+        </div>
+      </div>
+
+      <div class="steps-list">
+        <div class="step-item" data-reveal>
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h4>브리프</h4>
+            <p>요청을 한 장짜리 기획서로 정리하고 최적의 컬러 테마를 정해요.</p>
+          </div>
+        </div>
+        <div class="step-item" data-reveal>
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h4>예산 먼저</h4>
+            <p>budget-agent가 예산 기준표로 모든 금액의 기준을 잡아요.</p>
+          </div>
+        </div>
+        <div class="step-item" data-reveal>
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h4>원고</h4>
+            <p>전문가들이 같은 브리프로 각자 깊이 있는 원고를 작성해요.</p>
+          </div>
+        </div>
+        <div class="step-item" data-reveal>
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <h4>파일 5개</h4>
+            <p>엄격한 디자인 규칙에 맞춰 파일을 만들어 한 번에 첨부해 드려요.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Design Theme Section -->
+  <section class="design-banner">
+    <div class="section-eyebrow serif-italic">One design language.</div>
+    <h2 class="section-title" style="margin-bottom: 12px;">다섯 파일, 하나의 리퀴드 글래스.</h2>
+    <p style="font-size: 16px; opacity: .9; max-width: 500px; margin: 0 auto;">재질과 레이아웃은 늘 같고, 색만 주제에 맞게 바뀝니다.</p>
+
+    <div class="themes-grid">
+      <div class="theme-card">
+        <div class="theme-dots"><div class="theme-dot" style="background:#A8D8FF"></div><div class="theme-dot" style="background:#007AFF"></div></div>
+        <h4>스카이</h4>
+        <p>교육 및 일반 행사</p>
+      </div>
+      <div class="theme-card">
+        <div class="theme-dots"><div class="theme-dot" style="background:#1EC8FF"></div><div class="theme-dot" style="background:#FF2E93"></div></div>
+        <h4>팝</h4>
+        <p>IT 캠페인 및 축제</p>
+      </div>
+      <div class="theme-card">
+        <div class="theme-dots"><div class="theme-dot" style="background:#0B1628"></div><div class="theme-dot" style="background:#6EA8FF"></div></div>
+        <h4>네이비</h4>
+        <p>공공 보고서 및 정책</p>
+      </div>
+      <div class="theme-card">
+        <div class="theme-dots"><div class="theme-dot" style="background:#A8E3C4"></div><div class="theme-dot" style="background:#12A150"></div></div>
+        <h4>그린</h4>
+        <p>환경 및 ESG</p>
+      </div>
+      <div class="theme-card">
+        <div class="theme-dots"><div class="theme-dot" style="background:#FFC2B3"></div><div class="theme-dot" style="background:#FF6B4A"></div></div>
+        <h4>코럴</h4>
+        <p>가족 및 복지</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. Ready Prompts Marquee -->
+  <section class="marquee-section" id="design">
+    <div style="text-align: center; margin-bottom: 8px;">
+      <span class="section-eyebrow serif-italic" style="color: #8B5CF6;">Ready prompts.</span>
+      <h3 style="font-size: 28px; font-weight: 800; letter-spacing: -.03em;">이런 요청에 강해요</h3>
+    </div>
+
+    <div class="marquee-track">
+      <button class="marquee-chip" onclick="sendPrompt('가을 학교 축제 기획해 줘')">가을 학교 축제 기획해 줘</button>
+      <button class="marquee-chip" onclick="sendPrompt('탄소중립 캠페인 홍보물 만들어 줘')">탄소중립 캠페인 홍보물 만들어 줘</button>
+      <button class="marquee-chip" onclick="sendPrompt('교사 AI 연수 프로그램 제안해 줘')">교사 AI 연수 프로그램 제안해 줘</button>
+      <button class="marquee-chip" onclick="sendPrompt('신제품 런칭 행사 기획해 줘')">신제품 런칭 행사 기획해 줘</button>
+      <button class="marquee-chip" onclick="sendPrompt('진로 체험 주간 프로그램 만들어 줘')">진로 체험 주간 프로그램 만들어 줘</button>
+      <!-- Duplicate for infinite scroll smoothness -->
+      <button class="marquee-chip" onclick="sendPrompt('가을 학교 축제 기획해 줘')">가을 학교 축제 기획해 줘</button>
+      <button class="marquee-chip" onclick="sendPrompt('탄소중립 캠페인 홍보물 만들어 줘')">탄소중립 캠페인 홍보물 만들어 줘</button>
+      <button class="marquee-chip" onclick="sendPrompt('교사 AI 연수 프로그램 제안해 줘')">교사 AI 연수 프로그램 제안해 줘</button>
+    </div>
+    <div class="marquee-track reverse">
+      <button class="marquee-chip" onclick="sendPrompt('지역 축제 홍보 기획해 줘')">지역 축제 홍보 기획해 줘</button>
+      <button class="marquee-chip" onclick="sendPrompt('고객 제안 워크숍 준비해 줘')">고객 제안 워크숍 준비해 줘</button>
+      <button class="marquee-chip" onclick="sendPrompt('학부모 설명회 자료 만들어 줘')">학부모 설명회 자료 만들어 줘</button>
+      <button class="marquee-chip" onclick="sendPrompt('해커톤 대회 기획해 줘')">해커톤 대회 기획해 줘</button>
+      <button class="marquee-chip" onclick="sendPrompt('동아리 박람회 운영 계획 짜줘')">동아리 박람회 운영 계획 짜줘</button>
+      <!-- Duplicate -->
+      <button class="marquee-chip" onclick="sendPrompt('지역 축제 홍보 기획해 줘')">지역 축제 홍보 기획해 줘</button>
+      <button class="marquee-chip" onclick="sendPrompt('고객 제안 워크숍 준비해 줘')">고객 제안 워크숍 준비해 줘</button>
+      <button class="marquee-chip" onclick="sendPrompt('학부모 설명회 자료 만들어 줘')">학부모 설명회 자료 만들어 줘</button>
+    </div>
+  </section>
+
+  <!-- 8. Final CTA Section -->
+  <section class="cta-section">
+    <div class="cta-panel mesh">
+      <span class="section-eyebrow serif-italic" style="color: #6E8BFF;">Your turn.</span>
+      <h2 style="font-size: clamp(36px, 5vw, 64px); font-weight: 800; line-height: 1.1; letter-spacing: -.04em;">
+        지금, 아이디어 한 줄을<br>적어 보세요.
+      </h2>
+      <button class="cta-button" onclick="scrollToChat()">대화 시작하기 ↑</button>
+    </div>
+  </section>
+
+  <!-- 9. Footer -->
+  <footer>
+    <p>AI Creative Agent Team &nbsp;·&nbsp; Copilot Studio로 만든 멀티 에이전트 &nbsp;·&nbsp; © 2026</p>
+  </footer>
+
+  <!-- 10. Floating Notification -->
+  <a href="#chatCard" class="floating-notif" id="floatingNotif" onclick="scrollToChat(); return false;">
+    <span id="notifText">팀이 작업 중 · 1:20</span>
+  </a>
+
+  <!-- Web Chat CDN -->
   <script src="https://cdn.botframework.com/botframework-webchat/4.18.0/webchat.js"></script>
   <script>
     const BROKER_URL = "https://dl-broker-juwon-4jt3z.azurewebsites.net/api/directlineToken";
     const SEALED = "Ww8-9l_5tSYnUaEtLaVSquFQeNob998G9S-XvoCtHAvhmS_NCGE5a15E4epGEg6cUAUa60ywBFi6qhQ5D28gPicKxpVe79pOIT7LIny-XUzEsTW7aVXnr6PsmihWCTQmvo6i5DnpTxCB5nFGuOOzJK2hmkjzYNBe37R_jS-26P6tC3awiiFW-IbpETPI6lywOPFEfdwQmSeGrdHCgPfmWRoAPtPG3nBPDmg4S7s-k5GpMVEryKy-hOB3tuma_nYzgPOFZuNCvxGxB0B6Pvj6CN9PGEggr1DriTYKMHD773wdD8gE0m5iXrJ0Ev17gd66T7vO3Sdj_CJ_ePtMGtzwngRQrPEwhFNN7uTbbsVV4t17H_uO_9YEnsYewIqNdYosyplnQGuQKSvr3DQqj29JoAAckO3y-8-gmC9YfqAEs5o2k5cJXbIj0NmU9tsiwVTJQT9DvjB3ZSng5hQn97XQI3KUQT11fDlFbGQtW84x_Ty0Cl6V6vxpNZTFGcm52WLWIrPLIkVEA9RW-p7gYX3Vh0wOQ3dX9jxkfh7TJN01aeporSG_21bNnKcVfJknUUJpdCQfNcezk65nd3bPIxqN-x4alkeMv_IzJrCrU8gwddMAmXJdm49hbh3lpzFGpsWgx3MY-yO3SB6Nr5nnl3tnPmY";
-    const status = document.getElementById("status");
 
-    function showError(message) {
-      status.hidden = false;
-      status.textContent = message;
+    const userInput = document.getElementById("userInput");
+    const sendBtn = document.getElementById("sendBtn");
+    const chatCard = document.getElementById("chatCard");
+    const workingIndicator = document.getElementById("workingIndicator");
+    const workingText = document.getElementById("workingText");
+    const floatingNotif = document.getElementById("floatingNotif");
+    const notifText = document.getElementById("notifText");
+
+    let dispatchStore = null;
+    let workingTimer = null;
+    let workingSeconds = 0;
+    let hasStartedChat = false;
+
+    // Scroll to Chat helper
+    function scrollToChat() {
+      const topPos = chatCard.getBoundingClientRect().top + window.scrollY - 88;
+      window.scrollTo({ top: topPos, behavior: "smooth" });
+      setTimeout(() => userInput.focus({ preventScroll: true }), 400);
     }
 
+    // Send prompt helper from chips/marquee
+    function sendPrompt(text) {
+      scrollToChat();
+      userInput.value = text;
+      handleSend();
+    }
+
+    // Auto resize textarea
+    userInput.addEventListener("input", function() {
+      this.style.height = "auto";
+      this.style.height = (this.scrollHeight) + "px";
+      sendBtn.disabled = !this.value.trim();
+    });
+
+    // Enter to send
+    userInput.addEventListener("keydown", function(e) {
+      if (e.key === "Enter" && !e.shiftKey && !e.isComposing && e.keyCode !== 229) {
+        e.preventDefault();
+        handleSend();
+      }
+    });
+
+    function handleSend() {
+      const text = userInput.value.trim();
+      if (!text || !dispatchStore) return;
+
+      if (!hasStartedChat) {
+        hasStartedChat = true;
+        document.body.classList.add("is-started");
+      }
+
+      dispatchStore({
+        type: "WEB_CHAT/SEND_MESSAGE",
+        payload: { text }
+      });
+
+      userInput.value = "";
+      userInput.style.height = "auto";
+      sendBtn.disabled = true;
+
+      // Start working state
+      document.body.classList.add("is-working");
+      workingSeconds = 0;
+      updateWorkingTimerText();
+      if (workingTimer) clearInterval(workingTimer);
+      workingTimer = setInterval(() => {
+        workingSeconds++;
+        updateWorkingTimerText();
+      }, 1000);
+    }
+
+    function updateWorkingTimerText() {
+      const mins = Math.floor(workingSeconds / 60);
+      const secs = workingSeconds % 60;
+      const timeStr = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+      workingText.textContent = workingSeconds > 20 
+        ? `파일 5개를 만드느라 몇 분 걸릴 수 있어요 · ${timeStr}` 
+        : `팀이 작업 중 · ${timeStr}`;
+      
+      // Floating notification if chat card is out of view
+      const rect = chatCard.getBoundingClientRect();
+      if (rect.bottom < 0 || rect.top > window.innerHeight) {
+        floatingNotif.classList.add("visible");
+        notifText.textContent = `팀이 작업 중 · ${timeStr}`;
+      } else {
+        floatingNotif.classList.remove("visible");
+      }
+    }
+
+    // Intersection Observer for reveal animations & floating notification
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("revealed");
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll("[data-reveal]").forEach(el => observer.observe(el));
+
+    // Stat Counter Animation
+    const statObserver = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const numEl = entry.target.querySelector(".stat-num");
+          const target = parseInt(numEl.getAttribute("data-target"));
+          let current = 0;
+          const timer = setInterval(() => {
+            current++;
+            numEl.textContent = current;
+            if (current >= target) clearInterval(timer);
+          }, 200);
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll(".stat-card").forEach(el => statObserver.observe(el));
+
+    // Main Connect Function
     async function connect() {
-      if (!window.WebChat ||
-          typeof WebChat.createDirectLine !== "function" ||
-          typeof WebChat.renderWebChat !== "function") {
-        showError("채팅 구성 요소를 불러오지 못했습니다. 네트워크를 확인한 뒤 새로고침해 주세요.");
+      if (!window.WebChat || typeof WebChat.createDirectLine !== "function" || typeof WebChat.renderWebChat !== "function") {
         return;
       }
 
       let response;
       try {
-        // Keep this a simple CORS request; the broker may not support preflight.
         response = await fetch(BROKER_URL, {
           method: "POST",
           body: JSON.stringify({ sealed: SEALED })
         });
       } catch {
-        showError("서버에 연결하지 못했습니다. 네트워크와 배포 주소를 확인해 주세요.");
         return;
       }
-      if (!response.ok) {
-        showError("서버가 연결 요청을 처리하지 못했습니다 (HTTP " + response.status + ").");
-        return;
-      }
+      if (!response.ok) return;
 
       let data;
       try {
         data = await response.json();
       } catch {
-        showError("서버 응답을 읽을 수 없습니다. 잠시 후 다시 시도해 주세요.");
         return;
       }
-      if (!data || typeof data.token !== "string" || !data.token.trim()) {
-        showError("서버에서 연결 토큰을 받지 못했습니다. 암호와 배포 주소를 확인해 주세요.");
-        return;
-      }
+      if (!data || typeof data.token !== "string" || !data.token.trim()) return;
 
       try {
         const directLine = WebChat.createDirectLine({ token: data.token });
-        status.hidden = true;
+        
+        // Middleware to handle connection & incoming agent activities
+        const store = WebChat.createStore({}, ({ dispatch }) => next => action => {
+          if (action.type === "DIRECT_LINE/CONNECT_FULFILLED") {
+            document.body.classList.add("is-connected");
+            userInput.disabled = false;
+            sendBtn.disabled = !userInput.value.trim();
+          }
+          if (action.type === "DIRECT_LINE/INCOMING_ACTIVITY") {
+            const activity = action.payload.activity;
+            if (activity && activity.from && activity.from.role !== "user") {
+              if (activity.type === "message") {
+                // Agent finished work!
+                document.body.classList.remove("is-working");
+                if (workingTimer) clearInterval(workingTimer);
+                floatingNotif.classList.add("visible");
+                notifText.textContent = "결과가 도착했어요 ↑";
+              }
+            }
+          }
+          return next(action);
+        });
+
+        dispatchStore = store.dispatch;
+
         directLine.postActivity({
           type: "event", name: "startConversation", from: { id: "user" }
-        }).subscribe({
-          error: () => showError("첫 인사를 요청하지 못했습니다. 채팅창에 메시지를 입력해 주세요.")
-        });
-        WebChat.renderWebChat({ directLine, locale: "ko-KR" }, document.getElementById("webchat"));
+        }).subscribe({});
+
+        WebChat.renderWebChat({
+          directLine,
+          store,
+          locale: "ko-KR",
+          styleOptions: {
+            hideSendBox: true,
+            rootHeight: "100%",
+            backgroundColor: "transparent",
+            primaryFont: "'Pretendard Variable', -apple-system, sans-serif",
+            bubbleBackground: "transparent",
+            bubbleBorderWidth: 0,
+            bubbleMaxWidth: 720,
+            bubbleMinWidth: 0,
+            bubbleFromUserBackground: "linear-gradient(135deg, #EEF0FF, #FBEFFF)",
+            bubbleFromUserBorderWidth: 0,
+            bubbleFromUserBorderRadius: 20
+          }
+        }, document.getElementById("webchat"));
+
       } catch {
-        showError("채팅을 시작하지 못했습니다. 새로고침 후 다시 시도해 주세요.");
+        // Handle gracefully
       }
     }
 
